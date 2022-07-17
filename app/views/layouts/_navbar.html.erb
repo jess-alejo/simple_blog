@@ -1,24 +1,40 @@
 <header class="container d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+  <div class="d-inline-flex justify-content-between">
     <a href="/" class="navbar-brand d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
       <strong>SimpleBlog</strong>
     </a>
 
     <% if user_signed_in? %>
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">Pricing</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
+        <li><%= bootstrap_nav_link_to("Home", root_path) %></li>
+        <li><%= bootstrap_nav_link_to("About", about_path) %></li>
       </ul>
     <% end %>
+  </div>
 
-    <div class="col-md-3 text-end">
-      <% unless user_signed_in? %>
+    <% unless user_signed_in? %>
+      <div class="col-md-3 text-end">
         <%= link_to "Login", login_path, class: "btn btn-outline-primary me-2" %>
         <%= link_to "Register", register_path, class: "btn btn-primary" %>
-      <% else %>
-        <%= link_to "Logout", logout_path, data: { "turbo-method": :delete }, class: "btn btn-outline-primary me-2" %>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <div class="dropdown text-end">
+        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi-person-circle me-1"></i>
+          <%= current_user.name %>
+        </a>
+        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+          <li>
+            <%= link_to "My posts", posts_path, class: "dropdown-item" %>
+          </li>
+          <li>
+            <%= link_to "Create post", new_post_path, class: "dropdown-item" %>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <%= link_to "Log out", logout_path, data: { "turbo-method": :delete }, class: "dropdown-item" %>
+          </li>
+        </ul>
+      </div>
+    <% end %>
   </header>

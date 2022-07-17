@@ -3,8 +3,10 @@
 module ApplicationHelper
   PUNCTUATION_MARKS = %w[. ? !].freeze
 
-  def user_signed_in?
-    session[:user_id].present?
+  def page_title(text)
+    content_for :page_title do
+      tag.h1 text, class: "mb-5"
+    end
   end
 
   def punctuate(message)

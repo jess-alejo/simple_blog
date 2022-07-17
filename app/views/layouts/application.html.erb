@@ -14,7 +14,9 @@
     <%= render "layouts/navbar" %>
     <main class="container">
       <%= render "layouts/flash_notifications" %>
+      <%= yield :page_title %>
       <%= yield %>
     </main>
+    <%= render "layouts/footer" %>
   </body>
 </html>

@@ -8,5 +8,7 @@ Rails.application.routes.draw do
   resources :registrations, only: :create
   get "register", to: "registrations#new"
 
+  get "about", to: "sites#about"
+
   root "sites#home"
 end

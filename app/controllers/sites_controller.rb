@@ -4,4 +4,6 @@ class SitesController < ApplicationController
   def home
     @posts = Post.recent
   end
+
+  def about; end
 end

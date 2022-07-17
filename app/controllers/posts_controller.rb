@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   skip_before_action :authenticate_user, only: :show
 
   def index
-    @posts = Post.all
+    @posts = Post.recent.where(user_id: current_user.id)
   end
 
   def show; end
@@ -17,37 +17,29 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
+    @post.user = current_user
 
-    respond_to do |format|
-      if @post.save
-        format.html { redirect_to post_url(@post), notice: "Post was successfully created." }
-        format.json { render :show, status: :created, location: @post }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    if @post.save
+      redirect_to post_url(@post), notice: "Post was successfully created."
+    else
+      flash.now[:alert] = @posts.error.full_messages.to_sentence
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    respond_to do |format|
-      if @post.update(post_params)
-        format.html { redirect_to post_url(@post), notice: "Post was successfully updated." }
-        format.json { render :show, status: :ok, location: @post }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    if @post.update(post_params)
+      redirect_to post_url(@post), notice: "Post was successfully updated."
+    else
+      flash.now[:alert] = @post.errors.full_messages.to_sentence
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @post.destroy
 
-    respond_to do |format|
-      format.html { redirect_to posts_url, notice: "Post was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to posts_url, notice: "Post was successfully deleted."
   end
 
   private
@@ -57,6 +49,6 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :body, :user_id)
+    params.require(:post).permit(:title, :subtitle, :body)
   end
 end
