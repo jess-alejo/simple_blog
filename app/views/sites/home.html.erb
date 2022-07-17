@@ -1,2 +1,7 @@
-<h1>Site#home</h1>
-<p>Find me in app/views/site/home.html.erb</p>
+<h1 class="mb-5">Recent Posts</h1>
+
+<div class="row gx-4 gx-lg-5 justify-content-center">
+  <% @posts.each do |post| %>
+    <%= render "posts/preview", post: post %>
+  <% end %>
+</div>
